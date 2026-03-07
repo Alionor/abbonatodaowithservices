@@ -42,7 +42,7 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
     }
 
     @Override
-    public Abbonato get(Long idInput) throws Exception {
+    public Abbonato findById(Long idInput) throws Exception {
         if (isNotActive())
             throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
 

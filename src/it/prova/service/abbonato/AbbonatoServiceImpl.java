@@ -1,6 +1,13 @@
 package it.prova.service.abbonato;
 
+import it.prova.connection.MyConnection;
+import it.prova.dao.Constants;
 import it.prova.dao.abbonato.AbbonatoDAO;
+import it.prova.model.Abbonato;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbbonatoServiceImpl implements AbbonatoService {
 
@@ -8,6 +15,92 @@ public class AbbonatoServiceImpl implements AbbonatoService {
 
     public void setAbbonatoDao(AbbonatoDAO abbonatoDao) {
         this.abbonatoDao = abbonatoDao;
+    }
+
+    @Override
+    public List<Abbonato> trovaTutti() throws Exception {
+        List<Abbonato> result = new ArrayList<>();
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.list();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+    @Override
+    public Abbonato trovaPerId(Long idInput) throws Exception {
+        Abbonato result = null;
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.findById(idInput);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+    @Override
+    public int inserisciAbbonato(Abbonato abbonato) throws Exception {
+        int result = 0;
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.insert(abbonato);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+    @Override
+    public int modificaAbbonato(Abbonato abbonato) throws Exception {
+        int result = 0;
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.update(abbonato);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+    @Override
+    public int cancellaAbbonato(Long idInput) throws Exception {
+        int result = 0;
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.delete(idInput);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
     }
 
 

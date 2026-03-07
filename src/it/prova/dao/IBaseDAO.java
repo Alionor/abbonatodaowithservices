@@ -7,7 +7,7 @@ public interface IBaseDAO<T> {
 
 	public List<T> list() throws Exception;
 
-	public T get(Long idInput) throws Exception;
+	public T findById(Long idInput) throws Exception;
 
 	public int update(T input) throws Exception;
 
@@ -15,7 +15,7 @@ public interface IBaseDAO<T> {
 
 	public int delete(Long idDaRimuovere) throws Exception;
 
-	public List<T> findByExample(T input) throws Exception;
+	//public List<T> findByExample(T input) throws Exception;
 	
 	//questo mi serve per la injection della connection
 	public void setConnection(Connection connection);
