@@ -172,4 +172,39 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
         return abbonato;
     }
 
+    public List<Abbonato> findActiveInADateRange(java.util.Date dataInizio, java.util.Date dataFine) throws Exception {
+        if (isNotActive())
+            throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+        if (dataInizio == null || dataFine == null || dataInizio.getTime() > dataFine.getTime())
+            throw new Exception("Input inserito non valido.");
+
+        List<Abbonato> abbonati = new ArrayList<>();
+        Abbonato abbonato = null;
+        try (PreparedStatement ps = connection.prepareStatement("select * from abbonato where datastipula <= ? and (datacessazione >= ? || datacessazione is null);")) {
+            ps.setDate(1, new java.sql.Date(dataInizio.getTime()));
+            ps.setDate(2, new java.sql.Date(dataFine.getTime()));
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    abbonato = new Abbonato();
+                    abbonato.setNome(rs.getString("nome"));
+                    abbonato.setCognome(rs.getString("cognome"));
+                    abbonato.setImportomensile(rs.getInt("importomensile"));
+                    abbonato.setDataDiNascita(rs.getDate("datadinascita"));
+                    abbonato.setDataStipula(rs.getDate("datastipula"));
+                    abbonato.setDataCessazione(rs.getDate("datacessazione"));
+                    abbonato.setId(rs.getLong("ID"));
+                    abbonati.add(abbonato);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return abbonati;
+    }
+
+
 }

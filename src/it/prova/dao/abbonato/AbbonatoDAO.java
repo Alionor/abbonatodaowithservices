@@ -9,6 +9,8 @@ public interface AbbonatoDAO extends IBaseDAO<Abbonato> {
 
     public Abbonato findActiveWhoPaysMore() throws Exception;
 
+    public List<Abbonato> findActiveInADateRange(java.util.Date dataInizio, java.util.Date dataFine) throws Exception;
+
 
 
 }

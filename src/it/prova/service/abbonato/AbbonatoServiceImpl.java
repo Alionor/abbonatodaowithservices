@@ -121,5 +121,23 @@ public class AbbonatoServiceImpl implements AbbonatoService {
         return result;
     }
 
+    @Override
+    public List<Abbonato> trovaAbbonatiAttiviInRangeDate(java.util.Date dataInizio, java.util.Date dataFine) throws Exception {
+        List<Abbonato> result = new ArrayList<>();
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.findActiveInADateRange(dataInizio, dataFine);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+
 
 }

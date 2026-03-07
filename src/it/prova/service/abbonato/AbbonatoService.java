@@ -22,4 +22,6 @@ public interface AbbonatoService {
 
     public Abbonato trovaAbbonatoAttivoChePagaDiPiu() throws Exception;
 
+    public List<Abbonato> trovaAbbonatiAttiviInRangeDate(java.util.Date dataInizio, java.util.Date dataFine) throws Exception;
+
 }

@@ -20,7 +20,8 @@ public class TestAbbonato {
     //    testInserisciAbbonato(abbonatoService);
     //    testModificaAbbonato(abbonatoService);
     //    testCancellaAbbonato(abbonatoService);
-          testTrovaAbbonatoAttivoChePagaDiPiu(abbonatoService);
+    //    testTrovaAbbonatoAttivoChePagaDiPiu(abbonatoService);
+          testTrovaAbbonatiAttiviInRangeDate(abbonatoService);
 
 
     }
@@ -128,6 +129,33 @@ public class TestAbbonato {
 
         System.out.println("Abbonato attivo che paga di più: " + result);
         System.out.println(".......testTrovaAbbonatoAttivoChePagaDiPiu PASSED.............");
+    }
+
+    public static void testTrovaAbbonatiAttiviInRangeDate(AbbonatoService abbonatoService) throws Exception {
+        System.out.println(".......testTrovaAbbonatiAttiviInRangeDate inizio.............");
+
+        List<Abbonato> abbonatiTrovati = abbonatoService.trovaTutti();
+        if (abbonatiTrovati == null)
+            throw new RuntimeException("testTrovaAbbonatiAttiviInRangeDate FAILED ");
+
+        java.util.Date dataInizio = Date.valueOf("2023-05-01");
+        java.util.Date dataFine = Date.valueOf("2024-01-01");
+
+        List<Abbonato> controprova = new ArrayList<>();
+        for (Abbonato abb: abbonatiTrovati) {
+            if(abb.getDataStipula() != null && abb.getDataStipula().getTime() <= dataInizio.getTime() &&
+                    (abb.getDataCessazione() == null || abb.getDataCessazione().getTime() >= dataFine.getTime())) {
+                controprova.add(abb);
+            }
+        }
+
+        List<Abbonato> result = abbonatoService.trovaAbbonatiAttiviInRangeDate(dataInizio, dataFine);
+
+        if (result == null) throw new RuntimeException("testTrovaAbbonatiAttiviInRangeDate FAILED ");
+
+        System.out.println("Abbonati attivi in quel range, controprova: " + controprova.size() +"      "+ controprova);
+        System.out.println("Abbonati attivi nel range di date inserito: " + result.size() +"      "+ result);
+        System.out.println(".......testTrovaAbbonatiAttiviInRangeDate PASSED.............");
     }
 
 
