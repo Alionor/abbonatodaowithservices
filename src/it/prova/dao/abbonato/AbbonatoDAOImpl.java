@@ -51,11 +51,11 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
 
         Abbonato abbonato = null;
         try (PreparedStatement ps = connection.prepareStatement("select * from abbonato where id=?")) {
-
             ps.setLong(1, idInput);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    abbonato = new Abbonato();
                     abbonato.setNome(rs.getString("nome"));
                     abbonato.setCognome(rs.getString("cognome"));
                     abbonato.setImportomensile(rs.getInt("importomensile"));
@@ -85,7 +85,7 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
 
         int result = 0;
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO abbonato (nome, cognome, importomensile, datadinascita, datastipula, datacessazione) VALUES (?, ?, ?, ?, ?);")) {
+                "INSERT INTO abbonato (nome, cognome, importomensile, datadinascita, datastipula, datacessazione) VALUES (?, ?, ?, ?, ?, ?);")) {
             ps.setString(1, abbonatoInput.getNome());
             ps.setString(2, abbonatoInput.getCognome());
             ps.setInt(3, abbonatoInput.getImportomensile());

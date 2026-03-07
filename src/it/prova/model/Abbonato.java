@@ -22,6 +22,15 @@ public class Abbonato {
         this.dataCessazione = dataCessazione;
     }
 
+    public Abbonato(String nome, String cognome, int importomensile, Date dataDiNascita, Date dataStipula, Date dataCessazione) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.importomensile = importomensile;
+        this.dataDiNascita = dataDiNascita;
+        this.dataStipula = dataStipula;
+        this.dataCessazione = dataCessazione;
+    }
+
     public Abbonato() {}
 
     public Long getId() {
