@@ -103,5 +103,23 @@ public class AbbonatoServiceImpl implements AbbonatoService {
         return result;
     }
 
+    @Override
+    public Abbonato trovaAbbonatoAttivoChePagaDiPiu() throws Exception {
+        Abbonato result = null;
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.findActiveWhoPaysMore();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+
 
 }

@@ -20,6 +20,7 @@ public class TestAbbonato {
     //    testInserisciAbbonato(abbonatoService);
     //    testModificaAbbonato(abbonatoService);
     //    testCancellaAbbonato(abbonatoService);
+          testTrovaAbbonatoAttivoChePagaDiPiu(abbonatoService);
 
 
     }
@@ -113,6 +114,23 @@ public class TestAbbonato {
         System.out.println("Ultimo abbonato dopo la cancellazione: " + abbonatiTrovati.get(abbonatiTrovati.size() - 1));
         System.out.println(".......testCancellaAbbonato PASSED.............");
     }
+
+    public static void testTrovaAbbonatoAttivoChePagaDiPiu(AbbonatoService abbonatoService) throws Exception {
+        System.out.println(".......testTrovaAbbonatoAttivoChePagaDiPiu inizio.............");
+
+        List<Abbonato> abbonatiTrovati = abbonatoService.trovaTutti();
+        if (abbonatiTrovati == null)
+            throw new RuntimeException("testTrovaAbbonatoAttivoChePagaDiPiu FAILED ");
+
+        Abbonato result = abbonatoService.trovaAbbonatoAttivoChePagaDiPiu();
+
+        if (result == null) throw new RuntimeException("testTrovaAbbonatoAttivoChePagaDiPiu FAILED ");
+
+        System.out.println("Abbonato attivo che paga di più: " + result);
+        System.out.println(".......testTrovaAbbonatoAttivoChePagaDiPiu PASSED.............");
+    }
+
+
 
 
 

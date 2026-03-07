@@ -3,6 +3,7 @@ package it.prova.service.abbonato;
 import it.prova.dao.abbonato.AbbonatoDAO;
 import it.prova.model.Abbonato;
 
+import java.security.spec.ECField;
 import java.util.List;
 
 public interface AbbonatoService {
@@ -19,6 +20,6 @@ public interface AbbonatoService {
 
     public int cancellaAbbonato(Long idInput) throws Exception;
 
-
+    public Abbonato trovaAbbonatoAttivoChePagaDiPiu() throws Exception;
 
 }

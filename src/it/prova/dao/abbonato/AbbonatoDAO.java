@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface AbbonatoDAO extends IBaseDAO<Abbonato> {
 
+    public Abbonato findActiveWhoPaysMore() throws Exception;
+
 
 
 }
