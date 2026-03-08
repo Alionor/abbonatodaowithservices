@@ -28,4 +28,6 @@ public interface AbbonatoService {
 
     public List<Abbonato> trovaPerCognomeOver60DisiscrittiDopo2020(String surname) throws Exception;
 
+    public List<Abbonato> trovaErroreDate() throws Exception;
+
 }

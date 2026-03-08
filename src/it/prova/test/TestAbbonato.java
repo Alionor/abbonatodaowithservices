@@ -24,8 +24,8 @@ public class TestAbbonato {
         //    testTrovaAbbonatoAttivoChePagaDiPiu(abbonatoService);
         //    testTrovaAbbonatiAttiviInRangeDate(abbonatoService);
         //    testTrovaAbbonatiAttiviNegliUltimiSeiMesi(abbonatoService);
-              testTrovaPerCognomeOver60DisiscrittiDopo2020(abbonatoService);
-
+        //    testTrovaPerCognomeOver60DisiscrittiDopo2020(abbonatoService);
+              testTrovaErroreDate(abbonatoService);
 
     }
 
@@ -215,6 +215,31 @@ public class TestAbbonato {
         System.out.println("Abbonati attivi over60, controprova: " + controprova.size() + "      " + controprova);
         System.out.println("Abbonati attivi over 60 dopo 2020  : " + result.size() + "      " + result);
         System.out.println(".......testTrovaPerCognomeOver60DisiscrittiDopo2020 PASSED.............");
+    }
+
+    public static void testTrovaErroreDate(AbbonatoService abbonatoService) throws Exception {
+        System.out.println(".......testTrovaErroreDate inizio.............");
+
+        List<Abbonato> abbonatiTrovati = abbonatoService.trovaTutti();
+        if (abbonatiTrovati == null)
+            throw new RuntimeException("testTrovaErroreDate FAILED ");
+
+        List<Abbonato> controprova = new ArrayList<>();
+
+        for (Abbonato abb : abbonatiTrovati) {
+            if (abb.getDataStipula() != null && abb.getDataCessazione() != null
+                    && abb.getDataStipula().getTime() > abb.getDataCessazione().getTime()) {
+                controprova.add(abb);
+            }
+        }
+
+        List<Abbonato> result = abbonatoService.trovaErroreDate();
+
+        if (result == null) throw new RuntimeException("testTrovaErroreDate FAILED ");
+
+        System.out.println("Abbonati attivi over60, controprova: " + controprova.size() + "      " + controprova);
+        System.out.println("Abbonati attivi over 60 dopo 2020  : " + result.size() + "      " + result);
+        System.out.println(".......testTrovaErroreDate PASSED.............");
     }
 
 

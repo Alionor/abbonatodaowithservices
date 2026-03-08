@@ -275,5 +275,31 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
         return abbonati;
     }
 
+    public List<Abbonato> findDateError() throws Exception {
+        if (isNotActive())
+            throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+        List<Abbonato> abbonati = new ArrayList<>();
+        Abbonato abbonato = null;
+        try (Statement s = connection.createStatement(); ResultSet rs = s.executeQuery("select * from abbonato where datastipula > datacessazione;")) {
+
+                while (rs.next()) {
+                    abbonato = new Abbonato();
+                    abbonato.setNome(rs.getString("nome"));
+                    abbonato.setCognome(rs.getString("cognome"));
+                    abbonato.setImportomensile(rs.getInt("importomensile"));
+                    abbonato.setDataDiNascita(rs.getDate("datadinascita"));
+                    abbonato.setDataStipula(rs.getDate("datastipula"));
+                    abbonato.setDataCessazione(rs.getDate("datacessazione"));
+                    abbonato.setId(rs.getLong("id"));
+                    abbonati.add(abbonato);
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return abbonati;
+    }
+
 
 }

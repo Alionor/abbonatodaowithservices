@@ -16,5 +16,5 @@ public interface AbbonatoDAO extends IBaseDAO<Abbonato> {
 
     public List<Abbonato> findBySurnameOverAgeWhoUnsubscribedAfterDate(String surname, int age, Date date) throws Exception;
 
-
+    public List<Abbonato> findDateError() throws Exception;
 }

@@ -177,4 +177,22 @@ public class AbbonatoServiceImpl implements AbbonatoService {
         return result;
     }
 
+    @Override
+    public List<Abbonato> trovaErroreDate() throws Exception {
+        List<Abbonato> result = new ArrayList<>();
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.findDateError();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+
 }
