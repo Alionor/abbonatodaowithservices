@@ -26,4 +26,6 @@ public interface AbbonatoService {
 
     public List<Abbonato> trovaAbbonatiAttiviNegliUltimiSeiMesi() throws Exception;
 
+    public List<Abbonato> trovaPerCognomeOver60DisiscrittiDopo2020(String surname) throws Exception;
+
 }

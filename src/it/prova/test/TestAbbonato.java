@@ -23,7 +23,8 @@ public class TestAbbonato {
         //    testCancellaAbbonato(abbonatoService);
         //    testTrovaAbbonatoAttivoChePagaDiPiu(abbonatoService);
         //    testTrovaAbbonatiAttiviInRangeDate(abbonatoService);
-              testTrovaAbbonatiAttiviNegliUltimiSeiMesi(abbonatoService);
+        //    testTrovaAbbonatiAttiviNegliUltimiSeiMesi(abbonatoService);
+              testTrovaPerCognomeOver60DisiscrittiDopo2020(abbonatoService);
 
 
     }
@@ -185,6 +186,35 @@ public class TestAbbonato {
         System.out.println("Abbonati attivi in range, controprova: " + controprova.size() + "      " + controprova);
         System.out.println("Abbonati attivi negli ultimi 6 mesi  : " + result.size() + "      " + result);
         System.out.println(".......testTrovaAbbonatiAttiviNegliUltimiSeiMesi PASSED.............");
+    }
+
+    public static void testTrovaPerCognomeOver60DisiscrittiDopo2020(AbbonatoService abbonatoService) throws Exception {
+        System.out.println(".......testTrovaPerCognomeOver60DisiscrittiDopo2020 inizio.............");
+
+        List<Abbonato> abbonatiTrovati = abbonatoService.trovaTutti();
+        if (abbonatiTrovati == null)
+            throw new RuntimeException("testTrovaPerCognomeOver60DisiscrittiDopo2020 FAILED ");
+
+        Date data = Date.valueOf("2020-01-01");
+        LocalDate dataNascitaOver60 = LocalDate.now().minusYears(60);
+        Date over60 = Date.valueOf(dataNascitaOver60);
+        List<Abbonato> controprova = new ArrayList<>();
+
+        for (Abbonato abb : abbonatiTrovati) {
+            if (abb.getCognome().equals("Polli") && abb.getDataDiNascita() != null && abb.getDataCessazione() != null
+                    && abb.getDataDiNascita().getTime() <= over60.getTime() &&
+                    abb.getDataCessazione().getTime() >= data.getTime()) {
+                controprova.add(abb);
+            }
+        }
+
+        List<Abbonato> result = abbonatoService.trovaPerCognomeOver60DisiscrittiDopo2020("Polli");
+
+        if (result == null) throw new RuntimeException("testTrovaPerCognomeOver60DisiscrittiDopo2020 FAILED ");
+
+        System.out.println("Abbonati attivi over60, controprova: " + controprova.size() + "      " + controprova);
+        System.out.println("Abbonati attivi over 60 dopo 2020  : " + result.size() + "      " + result);
+        System.out.println(".......testTrovaPerCognomeOver60DisiscrittiDopo2020 PASSED.............");
     }
 
 

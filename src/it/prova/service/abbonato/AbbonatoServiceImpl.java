@@ -6,6 +6,7 @@ import it.prova.dao.abbonato.AbbonatoDAO;
 import it.prova.model.Abbonato;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,5 +158,23 @@ public class AbbonatoServiceImpl implements AbbonatoService {
         return result;
     }
 
+    @Override
+    public List<Abbonato> trovaPerCognomeOver60DisiscrittiDopo2020(String surname) throws Exception {
+        List<Abbonato> result = new ArrayList<>();
+        try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+
+            // inietto la connection nel dao
+            abbonatoDao.setConnection(connection);
+            Date date = Date.valueOf("2020-01-01");
+
+            // eseguo quello che realmente devo fare
+            result = abbonatoDao.findBySurnameOverAgeWhoUnsubscribedAfterDate(surname, 60, date);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
 
 }

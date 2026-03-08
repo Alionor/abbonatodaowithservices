@@ -5,6 +5,7 @@ import it.prova.model.Abbonato;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
@@ -30,7 +31,7 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
                 abbonato.setDataDiNascita(rs.getDate("datadinascita"));
                 abbonato.setDataStipula(rs.getDate("datastipula"));
                 abbonato.setDataCessazione(rs.getDate("datacessazione"));
-                abbonato.setId(rs.getLong("ID"));
+                abbonato.setId(rs.getLong("id"));
                 result.add(abbonato);
             }
 
@@ -62,7 +63,7 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
                     abbonato.setDataDiNascita(rs.getDate("datadinascita"));
                     abbonato.setDataStipula(rs.getDate("datastipula"));
                     abbonato.setDataCessazione(rs.getDate("datacessazione"));
-                    abbonato.setId(rs.getLong("ID"));
+                    abbonato.setId(rs.getLong("id"));
                 } else {
                     abbonato = null;
                 }
@@ -161,7 +162,7 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
                 abbonato.setDataDiNascita(rs.getDate("datadinascita"));
                 abbonato.setDataStipula(rs.getDate("datastipula"));
                 abbonato.setDataCessazione(rs.getDate("datacessazione"));
-                abbonato.setId(rs.getLong("ID"));
+                abbonato.setId(rs.getLong("id"));
             } else {
                 abbonato = null;
             }
@@ -195,7 +196,7 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
                     abbonato.setDataDiNascita(rs.getDate("datadinascita"));
                     abbonato.setDataStipula(rs.getDate("datastipula"));
                     abbonato.setDataCessazione(rs.getDate("datacessazione"));
-                    abbonato.setId(rs.getLong("ID"));
+                    abbonato.setId(rs.getLong("id"));
                     abbonati.add(abbonato);
                 }
             }
@@ -228,7 +229,42 @@ public class AbbonatoDAOImpl extends AbstractMySQLDAO implements AbbonatoDAO {
                     abbonato.setDataDiNascita(rs.getDate("datadinascita"));
                     abbonato.setDataStipula(rs.getDate("datastipula"));
                     abbonato.setDataCessazione(rs.getDate("datacessazione"));
-                    abbonato.setId(rs.getLong("ID"));
+                    abbonato.setId(rs.getLong("id"));
+                    abbonati.add(abbonato);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return abbonati;
+    }
+
+    public List<Abbonato> findBySurnameOverAgeWhoUnsubscribedAfterDate(String surname, int age, Date date) throws Exception {
+        if (isNotActive())
+            throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+        if (surname == null || age < 0 || date == null)
+            throw new Exception("Input inserito non valido.");
+
+        List<Abbonato> abbonati = new ArrayList<>();
+        Abbonato abbonato = null;
+        try (PreparedStatement ps = connection.prepareStatement("select * from abbonato where cognome = ? and datadinascita <= date_sub(curdate(), interval ? year) and datacessazione >= ?;")) {
+            ps.setString(1, surname);
+            ps.setInt(2, age);
+            ps.setDate(3, new java.sql.Date(date.getTime()));
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    abbonato = new Abbonato();
+                    abbonato.setNome(rs.getString("nome"));
+                    abbonato.setCognome(rs.getString("cognome"));
+                    abbonato.setImportomensile(rs.getInt("importomensile"));
+                    abbonato.setDataDiNascita(rs.getDate("datadinascita"));
+                    abbonato.setDataStipula(rs.getDate("datastipula"));
+                    abbonato.setDataCessazione(rs.getDate("datacessazione"));
+                    abbonato.setId(rs.getLong("id"));
                     abbonati.add(abbonato);
                 }
             }
