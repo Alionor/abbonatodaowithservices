@@ -11,6 +11,6 @@ public interface AbbonatoDAO extends IBaseDAO<Abbonato> {
 
     public List<Abbonato> findActiveInADateRange(java.util.Date dataInizio, java.util.Date dataFine) throws Exception;
 
-
+    public List<Abbonato> findActiveInTheLastMonths(int monthsToCheck) throws Exception;
 
 }

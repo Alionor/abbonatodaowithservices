@@ -7,6 +7,7 @@ import it.prova.service.MyServiceFactory;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TestAbbonato {
@@ -15,13 +16,14 @@ public class TestAbbonato {
 
         AbbonatoService abbonatoService = MyServiceFactory.getAbbonatoServiceImpl();
 
-    //    testTrovaTutti(abbonatoService);
-    //    testTrovaPerId(abbonatoService);
-    //    testInserisciAbbonato(abbonatoService);
-    //    testModificaAbbonato(abbonatoService);
-    //    testCancellaAbbonato(abbonatoService);
-    //    testTrovaAbbonatoAttivoChePagaDiPiu(abbonatoService);
-          testTrovaAbbonatiAttiviInRangeDate(abbonatoService);
+        //    testTrovaTutti(abbonatoService);
+        //    testTrovaPerId(abbonatoService);
+        //    testInserisciAbbonato(abbonatoService);
+        //    testModificaAbbonato(abbonatoService);
+        //    testCancellaAbbonato(abbonatoService);
+        //    testTrovaAbbonatoAttivoChePagaDiPiu(abbonatoService);
+        //    testTrovaAbbonatiAttiviInRangeDate(abbonatoService);
+              testTrovaAbbonatiAttiviNegliUltimiSeiMesi(abbonatoService);
 
 
     }
@@ -82,8 +84,8 @@ public class TestAbbonato {
 
         abbonatoService.inserisciAbbonato(new Abbonato("Arturo", "Ronin", 30, Date.valueOf("2001-12-05"), Date.valueOf("2020-03-03"), Date.valueOf("2021-03-03")));
         abbonatiTrovati = abbonatoService.trovaTutti();
-        Long id = abbonatiTrovati.get(abbonatiTrovati.size()-1).getId();
-        System.out.println("Abbonato all'inizio: " + abbonatiTrovati.get(abbonatiTrovati.size()-1));
+        Long id = abbonatiTrovati.get(abbonatiTrovati.size() - 1).getId();
+        System.out.println("Abbonato all'inizio: " + abbonatiTrovati.get(abbonatiTrovati.size() - 1));
         Abbonato abbonatoModificato = new Abbonato(id, "Gennarino", "Pane", 50, Date.valueOf("2001-12-05"), Date.valueOf("2020-03-03"), null);
 
         int result = abbonatoService.modificaAbbonato(abbonatoModificato);
@@ -104,8 +106,8 @@ public class TestAbbonato {
 
         abbonatoService.inserisciAbbonato(new Abbonato("Pollicino", "Cappero", 20, Date.valueOf("2001-12-05"), Date.valueOf("2020-03-03"), Date.valueOf("2021-03-03")));
         abbonatiTrovati = abbonatoService.trovaTutti();
-        Long id = abbonatiTrovati.get(abbonatiTrovati.size()-1).getId();
-        System.out.println("Ultimo abbonato prima della cancellazione: " + abbonatiTrovati.get(abbonatiTrovati.size()-1));
+        Long id = abbonatiTrovati.get(abbonatiTrovati.size() - 1).getId();
+        System.out.println("Ultimo abbonato prima della cancellazione: " + abbonatiTrovati.get(abbonatiTrovati.size() - 1));
 
         int result = abbonatoService.cancellaAbbonato(id);
 
@@ -142,8 +144,8 @@ public class TestAbbonato {
         java.util.Date dataFine = Date.valueOf("2024-01-01");
 
         List<Abbonato> controprova = new ArrayList<>();
-        for (Abbonato abb: abbonatiTrovati) {
-            if(abb.getDataStipula() != null && abb.getDataStipula().getTime() <= dataInizio.getTime() &&
+        for (Abbonato abb : abbonatiTrovati) {
+            if (abb.getDataStipula() != null && abb.getDataStipula().getTime() <= dataInizio.getTime() &&
                     (abb.getDataCessazione() == null || abb.getDataCessazione().getTime() >= dataFine.getTime())) {
                 controprova.add(abb);
             }
@@ -153,13 +155,37 @@ public class TestAbbonato {
 
         if (result == null) throw new RuntimeException("testTrovaAbbonatiAttiviInRangeDate FAILED ");
 
-        System.out.println("Abbonati attivi in quel range, controprova: " + controprova.size() +"      "+ controprova);
-        System.out.println("Abbonati attivi nel range di date inserito: " + result.size() +"      "+ result);
+        System.out.println("Abbonati attivi in quel range, controprova: " + controprova.size() + "      " + controprova);
+        System.out.println("Abbonati attivi nel range di date inserito: " + result.size() + "      " + result);
         System.out.println(".......testTrovaAbbonatiAttiviInRangeDate PASSED.............");
     }
 
+    public static void testTrovaAbbonatiAttiviNegliUltimiSeiMesi(AbbonatoService abbonatoService) throws Exception {
+        System.out.println(".......testTrovaAbbonatiAttiviNegliUltimiSeiMesi inizio.............");
 
+        List<Abbonato> abbonatiTrovati = abbonatoService.trovaTutti();
+        if (abbonatiTrovati == null)
+            throw new RuntimeException("testTrovaAbbonatiAttiviNegliUltimiSeiMesi FAILED ");
 
+        Date dataCorrente = Date.valueOf(LocalDate.now());
+        LocalDate seiMesiFa = LocalDate.now().minusMonths(6);
+        Date data = Date.valueOf(seiMesiFa);
+        List<Abbonato> controprova = new ArrayList<>();
+        for (Abbonato abb : abbonatiTrovati) {
+            if (abb.getDataStipula() != null && abb.getDataStipula().getTime() >= data.getTime() &&
+                    abb.getDataStipula().getTime() <= dataCorrente.getTime()) {
+                controprova.add(abb);
+            }
+        }
+
+        List<Abbonato> result = abbonatoService.trovaAbbonatiAttiviNegliUltimiSeiMesi();
+
+        if (result == null) throw new RuntimeException("testTrovaAbbonatiAttiviNegliUltimiSeiMesi FAILED ");
+
+        System.out.println("Abbonati attivi in range, controprova: " + controprova.size() + "      " + controprova);
+        System.out.println("Abbonati attivi negli ultimi 6 mesi  : " + result.size() + "      " + result);
+        System.out.println(".......testTrovaAbbonatiAttiviNegliUltimiSeiMesi PASSED.............");
+    }
 
 
 }

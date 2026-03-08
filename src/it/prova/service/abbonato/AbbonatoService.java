@@ -24,4 +24,6 @@ public interface AbbonatoService {
 
     public List<Abbonato> trovaAbbonatiAttiviInRangeDate(java.util.Date dataInizio, java.util.Date dataFine) throws Exception;
 
+    public List<Abbonato> trovaAbbonatiAttiviNegliUltimiSeiMesi() throws Exception;
+
 }
